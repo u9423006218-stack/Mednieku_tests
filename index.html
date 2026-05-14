@@ -7,7 +7,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
         
-        body { font-family: 'Roboto', sans-serif; background: #f4f7f6; margin: 0; padding: 0; color: #333; }
+        body { font-family: 'Roboto', sans-serif; background: #f4f7f6; margin: 0; padding: 0; color: #333; transition: 0.3s; }
         
         /* PAROLES EKRĀNS */
         #login-screen {
@@ -24,14 +24,15 @@
         .container { max-width: 1100px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 30px; }
         header { background: #2c5f2c; color: white; padding: 25px; text-align: center; border-radius: 10px; margin-bottom: 20px; }
 
-        /* GALERIJA */
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        /* GALERIJA (ŠPIKERIS) */
+        .gallery-section { margin-bottom: 40px; padding: 20px; background: #f9f9f9; border-radius: 10px; border: 1px solid #eee; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         .gallery-item { text-align: center; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .gallery-item img { width: 100%; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-        .gallery-item img:hover { transform: scale(1.05); filter: brightness(1.1); }
-        .gallery-label { font-weight: bold; font-size: 13px; margin-top: 8px; color: #2c5f2c; text-transform: uppercase; }
+        .gallery-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .gallery-item img:hover { transform: scale(1.05); }
+        .gallery-label { font-weight: bold; font-size: 12px; margin-top: 8px; color: #2c5f2c; text-transform: uppercase; }
 
-        /* MEKLĒŠANA */
+        /* MEKLĒŠANA UN KONTROLES */
         .search-container {
             position: sticky; top: 10px; z-index: 100; background: white; padding: 15px;
             border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 30px;
@@ -41,18 +42,18 @@
         
         /* JAUTĀJUMI */
         .question-block { padding: 25px; border-bottom: 1px solid #eee; }
+        .q-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; display: block; color: #1a2a1a; }
         .img-holder { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-        .img-holder img { height: 150px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; transition: 0.2s; }
-        .img-holder img:hover { border-color: #2c5f2c; transform: translateY(-2px); }
+        .img-holder img { height: 120px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; }
         
-        .opt { padding: 12px 15px; margin: 5px 0; border-radius: 6px; background: #f9f9f9; border: 2px solid #eee; cursor: pointer; }
+        .opt { padding: 12px 15px; margin: 5px 0; border-radius: 6px; background: #f9f9f9; border: 2px solid #eee; cursor: pointer; transition: 0.2s; }
         
-        /* MODAL (Lielais bildes logs) */
+        /* MODAL (BILDES PALIELINĀŠANA) */
         #imageModal {
             display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); justify-content: center; align-items: center; cursor: zoom-out;
         }
-        #modalImg { max-width: 95%; max-height: 95%; border-radius: 5px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        #modalImg { max-width: 95%; max-height: 95%; border-radius: 5px; }
 
         /* ATBILDES */
         .show-answers .correct { background: #e8f5e9; border-color: #2e7d32; color: #1b5e20; font-weight: bold; }
@@ -60,6 +61,7 @@
         .hide-answers .opt.revealed-correct { background: #e8f5e9; border-color: #2e7d32; color: #1b5e20; font-weight: bold; }
         .hide-answers .opt.revealed-wrong { background: #ffebee; border-color: #c62828; color: #b71c1c; }
 
+        /* SWITCH SLIDER */
         .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
@@ -91,7 +93,7 @@
     <div class="container">
         <header>
             <h1>🏹 Sagatavošanās mednieku eksāmenam</h1>
-            <p>Klikšķini uz bildes, lai to palielinātu!</p>
+            <p>Visi jautājumi ar 2026. gada labojumiem un bilžu identifikāciju</p>
         </header>
 
         <div class="gallery-section">
@@ -100,7 +102,7 @@
         </div>
 
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Meklēt dzīvnieku vai jautājumu...">
+            <input type="text" id="searchInput" placeholder="Meklēt jautājumu vai dzīvnieku...">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <span>Rādīt atbildes:</span>
                 <label class="switch">
@@ -118,60 +120,22 @@
 <button id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
 
 <script>
+// --- DATUBĀZE ---
+// Vari pievienot jautājumus gan ar bildēm, gan bez. 
+// Ja ir bildes, lieto: imageTrack, imageScat, imageReal
 const allQuestions = [
+    // --- JAUTĀJUMI BEZ BILDĒM ---
+    { id: 1, question: "Limitētie medījamie dzīvnieki ir", options: ["dzīvnieki, kuru medīšanai netiek noteikts pieļaujamais nomedīšanas apjoms", "dzīvnieki, kuru medīšanai tiek noteikts pieļaujamais nomedīšanas apjoms", "visi medījamie dzīvnieki"], answer: 1 },
+    { id: 2, question: "Kura no šīm ir nelimitēta suga 2026. gadā?", options: ["Stirna", "Staltbriedis", "Alnis"], answer: 0 },
+
+    // --- JAUTĀJUMI AR BILDĒM ---
     { id: 701, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: ALNIS", options: ["Alnis", "Staltbriedis", "Meža cūka"], answer: 0, imageTrack: "img/alnis_p.jpg", imageScat: "img/alnis_m.jpg", imageReal: "img/alnis_reals.jpg" },
-    { id: 702, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: MEŽA CŪKA", options: ["Briedis", "Meža cūka", "Lācis"], answer: 1, imageTrack: "img/cuka_p.jpg", imageScat: "img/cuka_m.jpg", imageReal: "img/cuka_reals.jpg" },
-    { id: 703, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: STALTBIERDIS", options: ["Alnis", "Staltbriedis", "Stirna"], answer: 1, imageTrack: "img/briedis_p.jpg", imageScat: "img/briedis_m.jpg", imageReal: "img/briedis_reals.jpg" },
-    { id: 704, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: STIRNA", options: ["Stirna", "Briedis", "Aita"], answer: 0, imageTrack: "img/stirna_p.jpg", imageScat: "img/stirna_m.jpg", imageReal: "img/stirna_reals.jpg" },
-    { id: 705, question: "Identificē dzīvnieku: VILKS", options: ["Suns", "Vilks", "Lūsis"], answer: 1, imageTrack: "img/vilks_p.jpg", imageScat: "img/vilks_m.jpg", imageReal: "img/vilks_reals.jpg" },
-    { id: 706, question: "Identificē dzīvnieku: LŪSIS", options: ["Lūsis", "Suns", "Vilks"], answer: 0, imageTrack: "img/lusis_p.jpg", imageScat: "img/lusis_m.jpg", imageReal: "img/lusis_reals.jpg" },
-    { id: 707, question: "Identificē dzīvnieku: LAPSA", options: ["Lapsa", "Jenotsuns", "Suns"], answer: 0, imageTrack: "img/lapsa_p.jpg", imageScat: "img/lapsa_m.jpg", imageReal: "img/lapsa_reals.jpg" },
-    { id: 708, question: "Identificē dzīvnieku: JENOTSUNS", options: ["Āpsis", "Jenotsuns", "Lapsa"], answer: 1, imageTrack: "img/jenotsuns_p.jpg", imageScat: "img/jenotsuns_m.jpg", imageReal: "img/jenotsuns_reals.jpg" },
-    { id: 709, question: "Identificē dzīvnieku: ĀPSIS", options: ["Āpsis", "Jenotsuns", "Bebrs"], answer: 0, imageTrack: "img/apsis_p.jpg", imageScat: "img/apsis_m.jpg", imageReal: "img/apsis_reals.jpg" },
-    { id: 710, question: "Identificē dzīvnieku: LĀCIS", options: ["Lācis", "Suns", "Āpsis"], answer: 0, imageTrack: "img/lacis_p.jpg", imageScat: "img/lacis_m.jpg", imageReal: "img/lacis_reals.jpg" },
-    { id: 711, question: "Identificē dzīvnieku: BEBRS", options: ["Bebrs", "Ondatra", "Ūdrs"], answer: 0, imageTrack: "img/bebrs_p.jpg", imageScat: "img/bebrs_m.jpg", imageReal: "img/bebrs_reals.jpg" },
-    { id: 712, question: "Identificē dzīvnieku: ŪDRS", options: ["Bebrs", "Ūdrs", "Ūdele"], answer: 1, imageTrack: "img/udrs_p.jpg", imageScat: "img/udrs_m.jpg", imageReal: "img/udrs_reals.jpg" },
-    { id: 713, question: "Identificē dzīvnieku: AMERIKAS ŪDELE", options: ["Eiropas ūdele", "Amerikas ūdele", "Sermulis"], answer: 1, imageTrack: "img/am_udele_p.jpg", imageScat: "img/am_udele_m.jpg", imageReal: "img/am_udele_reals.jpg" },
-    { id: 714, question: "Identificē dzīvnieku: EIROPAS ŪDELE", options: ["Amerikas ūdele", "Eiropas ūdele", "Ūdrs"], answer: 1, imageTrack: "img/ei_udele_p.jpg", imageScat: "img/ei_udele_m.jpg", imageReal: "img/ei_udele_reals.jpg" },
-    { id: 715, question: "Identificē dzīvnieku: ONDATRA", options: ["Ūdensžurka", "Bebrs", "Ondatra"], answer: 2, imageTrack: "img/ondatra_p.jpg", imageScat: "img/ondatra_m.jpg", imageReal: "img/ondatra_reals.jpg" },
-    { id: 716, question: "Identificē dzīvnieku: PELĒKAIS ZAĶIS", options: ["Baltais zaķis", "Pelēkais zaķis", "Trusis"], answer: 1, imageTrack: "img/p_zakis_p.jpg", imageScat: "img/p_zakis_m.jpg", imageReal: "img/p_zakis_reals.jpg" },
-    { id: 717, question: "Identificē dzīvnieku: BALTAIS ZAĶIS", options: ["Pelēkais zaķis", "Baltais zaķis", "Meža zaķis"], answer: 1, imageTrack: "img/b_zakis_p.jpg", imageScat: "img/b_zakis_m.jpg", imageReal: "img/b_zakis_reals.jpg" },
-    { id: 718, question: "Kas redzams attēlā?", options: ["Mednis", "Rubenis", "Raķelis"], answer: 0, imageTrack: "img/mednis.jpg" },
-    { id: 719, question: "Kas redzams attēlā?", options: ["Rubenis", "Mednis", "Teterevs"], answer: 0, imageTrack: "img/rubenis.jpg" },
-    { id: 720, question: "Kas redzams attēlā?", options: ["Rubeņa mātīte", "Medņa mātīte", "Mežirbe"], answer: 0, imageTrack: "img/rubenis_m.jpg" },
-    { id: 721, question: "Kas redzams attēlā?", options: ["Raķelis", "Mednis", "Rubenis"], answer: 0, imageTrack: "img/rakelis.jpg" },
-    { id: 722, question: "Kas redzams attēlā?", options: ["Mežirbe", "Laukirbe", "Sloka"], answer: 0, imageTrack: "img/mezirbe.jpg" },
-    { id: 723, question: "Kas redzams attēlā?", options: ["Laukirbe", "Mežirbe", "Fazāns"], answer: 0, imageTrack: "img/laukirbe.jpg" },
-    { id: 724, question: "Kas redzams attēlā?", options: ["Lielā gaura", "Mazā gaura", "Garkaklis"], answer: 0, imageTrack: "img/l_gaura.jpg" },
-    { id: 725, question: "Kas redzams attēlā?", options: ["Mazā gaura", "Lielā gaura", "Gaigala"], answer: 0, imageTrack: "img/m_gaura.jpg" },
-    { id: 726, question: "Kas redzams attēlā?", options: ["Gaigala", "Cekulpīle", "Ķerra"], answer: 0, imageTrack: "img/gaigala.jpg" },
-    { id: 727, question: "Kas redzams attēlā?", options: ["Garkaklis", "Platknābis", "Krīklis"], answer: 0, imageTrack: "img/garkaklis.jpg" },
-    { id: 728, question: "Kas redzams attēlā?", options: ["Sāmsalas pīle", "Garkaklis", "Zoss"], answer: 0, imageTrack: "img/samsalas_pile.jpg" },
-    { id: 729, question: "Kas redzams attēlā?", options: ["Kākaulis", "Tumšā pīle", "Pūkpīle"], answer: 0, imageTrack: "img/kakaulis.jpg" },
-    { id: 730, question: "Kas redzams attēlā?", options: ["Taigas sējas zoss", "Meža zoss", "Kanādas zoss"], answer: 0, imageTrack: "img/sejas_zoss.jpg" },
-    { id: 731, question: "Kas redzams attēlā?", options: ["Baltpieres zoss", "Mazā zoss", "Meža zoss"], answer: 0, imageTrack: "img/baltpieres_zoss.jpg" },
-    { id: 732, question: "Kas redzams attēlā?", options: ["Meža zoss", "Pelēkā zoss", "Ziemeļu zoss"], answer: 0, imageTrack: "img/meza_zoss.jpg" },
-    { id: 733, question: "Kas redzams attēlā?", options: ["Kanādas zoss", "Baltvaigu zoss", "Zoss"], answer: 0, imageTrack: "img/kanadas_zoss.jpg" },
-    { id: 734, question: "Kas redzams attēlā?", options: ["Baltvaigu zoss", "Kanādas zoss", "Mazā zoss"], answer: 0, imageTrack: "img/baltvaigu_zoss.jpg" },
-    { id: 735, question: "Kas redzams attēlā?", options: ["Mazā zoss", "Baltpieres zoss", "Sējas zoss"], answer: 0, imageTrack: "img/maza_zoss.jpg" },
-    { id: 736, question: "Kas redzams attēlā?", options: ["Pelēkā pīle", "Krīklis", "Prīkšķe"], answer: 0, imageTrack: "img/peleka_pile.jpg" },
-    { id: 737, question: "Kas redzams attēlā?", options: ["Prīkšķe", "Krīklis", "Platknābis"], answer: 0, imageTrack: "img/prikske.jpg" },
-    { id: 738, question: "Kas redzams attēlā?", options: ["Krīklis", "Prīkšķe", "Baltvēderis"], answer: 0, imageTrack: "img/kriklis.jpg" },
-    { id: 739, question: "Kas redzams attēlā?", options: ["Laucis", "Krīklis", "Ūdensvistiņa"], answer: 0, imageTrack: "img/laucis.jpg" },
-    { id: 740, question: "Kas redzams attēlā?", options: ["Cekulpīle", "Ķerra", "Gaigala"], answer: 0, imageTrack: "img/cekulpile.jpg" },
-    { id: 741, question: "Kas redzams attēlā?", options: ["Ķerra", "Cekulpīle", "Baltvēderis"], answer: 0, imageTrack: "img/kerra.jpg" },
-    { id: 742, question: "Kas redzams attēlā?", options: ["Baltvēderis", "Pelēkā pīle", "Krīklis"], answer: 0, imageTrack: "img/baltvederis.jpg" },
-    { id: 743, question: "Kas redzams attēlā?", options: ["Lauku balodis", "Meža balodis", "Mājas balodis"], answer: 0, imageTrack: "img/lauku_balodis.jpg" },
-    { id: 744, question: "Kas redzams attēlā?", options: ["Mājas balodis", "Lauku balodis", "Meža balodis"], answer: 0, imageTrack: "img/majas_balodis.jpg" },
-    { id: 745, question: "Kas redzams attēlā?", options: ["Meža balodis", "Lauku balodis", "Mājas balodis"], answer: 0, imageTrack: "img/meza_balodis.jpg" },
-    { id: 746, question: "Kas redzams attēlā?", options: ["Parastā pūkpīle", "Tumšā pīle", "Kākaulis"], answer: 0, imageTrack: "img/pukpile.jpg" },
-    { id: 747, question: "Kas redzams attēlā?", options: ["Krāšņā pūkpīle", "Pūkpīle", "Gaigala"], answer: 0, imageTrack: "img/krasna_pukpile.jpg" },
-    { id: 748, question: "Kas redzams attēlā?", options: ["Baltacis", "Cekulpīle", "Ķerra"], answer: 0, imageTrack: "img/baltacis.jpg" },
-    { id: 749, question: "Kas redzams attēlā?", options: ["Tumšā pīle", "Kākaulis", "Pūkpīle"], answer: 0, imageTrack: "img/tumsa_pile.jpg" },
-    { id: 750, question: "Kas redzams attēlā?", options: ["Platknābis", "Garkaklis", "Krīklis"], answer: 0, imageTrack: "img/platknabis.jpg" }
+    { id: 718, question: "Kas redzams attēlā?", options: ["Mednis", "Rubenis", "Raķelis"], answer: 0, imageTrack: "img/mednis.jpg" }
 ];
 
-// --- FUNKCIJA BILDES PALIELINĀŠANAI ---
+// --- FUNKCIJAS ---
+
+// Bildes palielināšana
 function zoomImg(src) {
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
@@ -179,9 +143,12 @@ function zoomImg(src) {
     modalImg.src = src;
 }
 
+// Paroles pārbaude
 async function checkPassword() {
     const input = document.getElementById('pinCode').value.trim();
-    const correctHash = "8b74cd1290fe14c722dbbcb3d777f8704e142406842d125865ab4a2b08c93c40";
+    const errorEl = document.getElementById('login-error');
+    const correctHash = "8b74cd1290fe14c722dbbcb3d777f8704e142406842d125865ab4a2b08c93c40"; 
+    
     const encoder = new TextEncoder();
     const data = encoder.encode(input);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -194,39 +161,50 @@ async function checkPassword() {
         renderGallery();
         renderQuestions();
     } else {
-        document.getElementById('login-error').innerText = "Nepareizs kods.";
+        errorEl.innerText = "Nepareizs kods.";
     }
 }
 
+// Galerijas renderēšana (tikai jautājumi ar bildēm)
 function renderGallery() {
     const container = document.getElementById('galleryContainer');
     container.innerHTML = "";
     allQuestions.forEach(q => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        const name = q.options[q.answer];
-        item.innerHTML = `<img src="${q.imageTrack}" onclick="zoomImg('${q.imageTrack}')"><div class="gallery-label">${name}</div>`;
-        container.appendChild(item);
+        if (q.imageTrack) {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            const name = q.options[q.answer];
+            item.innerHTML = `
+                <img src="${q.imageTrack}" onclick="zoomImg('${q.imageTrack}')" alt="${name}">
+                <div class="gallery-label">${name}</div>
+            `;
+            container.appendChild(item);
+        }
     });
 }
 
+// Jautājumu saraksta renderēšana
 function renderQuestions(filter = "") {
     const list = document.getElementById('questionsList');
     list.innerHTML = "";
     let count = 0;
 
     allQuestions.forEach(q => {
-        const name = q.options[q.answer].toLowerCase();
-        if (name.includes(filter.toLowerCase()) || q.question.toLowerCase().includes(filter.toLowerCase())) {
+        const searchText = (q.question + q.options.join(" ")).toLowerCase();
+        if (searchText.includes(filter.toLowerCase())) {
             count++;
             const div = document.createElement('div');
             div.className = 'question-block';
             
-            let imgHtml = `<div class="img-holder">`;
-            imgHtml += `<img src="${q.imageTrack}" onclick="zoomImg('${q.imageTrack}')">`;
-            if(q.imageScat) imgHtml += `<img src="${q.imageScat}" onclick="zoomImg('${q.imageScat}')">`;
-            if(q.imageReal) imgHtml += `<img src="${q.imageReal}" onclick="zoomImg('${q.imageReal}')">`;
-            imgHtml += `</div>`;
+            // Bilžu bloks (parādās tikai ja ir definēts imageTrack)
+            let imgHtml = "";
+            if (q.imageTrack) {
+                imgHtml = `<div class="img-holder">`;
+                imgHtml += `<img src="${q.imageTrack}" onclick="zoomImg('${q.imageTrack}')" title="Pēda/Foto">`;
+                if(q.imageScat) imgHtml += `<img src="${q.imageScat}" onclick="zoomImg('${q.imageScat}')" title="Mēsli">`;
+                if(q.imageReal) imgHtml += `<img src="${q.imageReal}" onclick="zoomImg('${q.imageReal}')" title="Dzīvnieks">`;
+                imgHtml += `</div>`;
+            }
 
             const options = q.options.map((opt, i) => `
                 <div class="opt ${i === q.answer ? 'correct' : ''}" onclick="handleOptClick(this, ${i === q.answer})">
@@ -241,6 +219,7 @@ function renderQuestions(filter = "") {
     document.getElementById('counter').innerText = `Atrasti: ${count}`;
 }
 
+// Atbildes klikšķis
 function handleOptClick(el, isCorrect) {
     if (!document.getElementById('modeToggle').checked) {
         el.classList.add(isCorrect ? 'revealed-correct' : 'revealed-wrong');
@@ -250,6 +229,7 @@ function handleOptClick(el, isCorrect) {
     }
 }
 
+// Event Listeners
 document.getElementById('modeToggle').addEventListener('change', (e) => {
     document.body.className = e.target.checked ? "show-answers" : "hide-answers";
     renderQuestions(document.getElementById('searchInput').value);
