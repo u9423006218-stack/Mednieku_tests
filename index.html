@@ -44,8 +44,20 @@
         .question-block { padding: 25px; border-bottom: 1px solid #eee; }
         .q-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; display: block; color: #1a2a1a; }
         .img-holder { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-        .img-holder img { height: 120px; border-radius: 6px; border: 1px solid #ddd; }
-        
+/* Jautājumu bilžu izmērs */
+.img-holder img { 
+    height: 300px; /* No 120px palielināts uz 300px */
+    border-radius: 10px; 
+    border: 2px solid #ddd;
+    object-fit: contain; /* Nodrošina, ka bilde netiek izstiepta */
+}
+
+/* Augšējā špikera (galerijas) izmērs */
+.gallery-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* No 180px uz 280px */
+    gap: 20px; 
+}        
         .opt { padding: 12px 15px; margin: 5px 0; border-radius: 6px; background: #f9f9f9; border: 2px solid #eee; cursor: pointer; transition: 0.2s; }
         
         /* ATBILDES */
@@ -218,12 +230,12 @@ function renderQuestions(filter = "") {
             const div = document.createElement('div');
             div.className = 'question-block';
             
-            // Bilžu bloks jautājumā
-            let imgHtml = `<div class="img-holder">`;
-            imgHtml += `<img src="${q.imageTrack}" title="Pēda/Foto">`;
-            if(q.imageScat) imgHtml += `<img src="${q.imageScat}" title="Mēsli">`;
-            if(q.imageReal) imgHtml += `<img src="${q.imageReal}" title="Reālā kāja">`;
-            imgHtml += `</div>`;
+          // Atrodi šo bloku funkcijā renderQuestions:
+let imgHtml = `<div class="img-holder">`;
+imgHtml += `<img src="${q.imageTrack}" title="Pēda/Foto" style="height: 300px;">`; // Pievienots stils šeit
+if(q.imageScat) imgHtml += `<img src="${q.imageScat}" title="Mēsli" style="height: 300px;">`;
+if(q.imageReal) imgHtml += `<img src="${q.imageReal}" title="Reālā kāja" style="height: 300px;">`;
+imgHtml += `</div>`;
 
             const options = q.options.map((opt, i) => `
                 <div class="opt ${i === q.answer ? 'correct' : ''}" onclick="handleOptClick(this, ${i === q.answer})">
