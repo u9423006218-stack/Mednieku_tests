@@ -21,18 +21,22 @@
 
         /* GALVENAIS SATURS */
         #main-content { display: none; padding: 20px; }
-        .container { max-width: 1100px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 30px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 30px; }
         header { background: #2c5f2c; color: white; padding: 25px; text-align: center; border-radius: 10px; margin-bottom: 20px; }
 
-        /* GALERIJA */
+        /* GALERIJA (ŠPIKERIS) */
         .gallery-section { margin-bottom: 40px; padding: 20px; background: #f9f9f9; border-radius: 10px; border: 1px solid #eee; }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-        .gallery-item { text-align: center; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .gallery-item img { width: 100%; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-        .gallery-item img:hover { transform: scale(1.05); }
-        .gallery-label { font-weight: bold; font-size: 13px; margin-top: 8px; color: #2c5f2c; text-transform: uppercase; }
+        .gallery-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 25px; 
+        }
+        .gallery-item { text-align: center; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .gallery-item img { width: 100%; height: 220px; object-fit: cover; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .gallery-item img:hover { transform: scale(1.02); }
+        .gallery-label { font-weight: bold; font-size: 15px; margin-top: 10px; color: #2c5f2c; text-transform: uppercase; }
 
-        /* MEKLĒŠANA UN TESTA RĪKI */
+        /* MEKLĒŠANA */
         .search-container {
             position: sticky; top: 10px; z-index: 100; background: white; padding: 15px;
             border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 30px;
@@ -40,32 +44,31 @@
         }
         input[type="text"] { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
         
-        /* JAUTĀJUMI */
-        .question-block { padding: 25px; border-bottom: 1px solid #eee; }
-        .q-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; display: block; color: #1a2a1a; }
-        .img-holder { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-/* Jautājumu bilžu izmērs */
-.img-holder img { 
-    height: 300px; /* No 120px palielināts uz 300px */
-    border-radius: 10px; 
-    border: 2px solid #ddd;
-    object-fit: contain; /* Nodrošina, ka bilde netiek izstiepta */
-}
-
-/* Augšējā špikera (galerijas) izmērs */
-.gallery-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* No 180px uz 280px */
-    gap: 20px; 
-}        
-        .opt { padding: 12px 15px; margin: 5px 0; border-radius: 6px; background: #f9f9f9; border: 2px solid #eee; cursor: pointer; transition: 0.2s; }
+        /* JAUTĀJUMI UN LIELĀS BILDES */
+        .question-block { padding: 30px 0; border-bottom: 2px solid #f0f0f0; }
+        .q-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; display: block; color: #1a2a1a; }
         
-        /* ATBILDES */
+        .img-holder { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; justify-content: flex-start; }
+        .img-holder img { 
+            height: 550px; /* Ļoti lielas bildes */
+            max-width: 100%; 
+            border-radius: 12px; 
+            border: 2px solid #ddd; 
+            object-fit: contain;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: #fff;
+        }
+        
+        .options { max-width: 600px; }
+        .opt { padding: 15px; margin: 8px 0; border-radius: 8px; background: #f9f9f9; border: 2px solid #eee; cursor: pointer; transition: 0.2s; font-size: 17px; }
+        
+        /* ATBILDES KRĀSAS */
         .show-answers .correct { background: #e8f5e9; border-color: #2e7d32; color: #1b5e20; font-weight: bold; }
         .show-answers .correct::before { content: "✅ "; }
         .hide-answers .opt.revealed-correct { background: #e8f5e9; border-color: #2e7d32; color: #1b5e20; font-weight: bold; }
         .hide-answers .opt.revealed-wrong { background: #ffebee; border-color: #c62828; color: #b71c1c; }
 
+        /* SLĒDZIS */
         .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
@@ -73,7 +76,7 @@
         input:checked + .slider { background-color: #2c5f2c; }
         input:checked + .slider:before { transform: translateX(26px); }
 
-        #scrollTop { position: fixed; bottom: 20px; right: 20px; background: #2c5f2c; color: white; border: none; padding: 15px; border-radius: 50%; cursor: pointer; display: none; }
+        #scrollTop { position: fixed; bottom: 20px; right: 20px; background: #2c5f2c; color: white; border: none; padding: 15px; border-radius: 50%; cursor: pointer; display: none; z-index: 1000; }
     </style>
 </head>
 <body class="show-answers">
@@ -93,7 +96,7 @@
     <div class="container">
         <header>
             <h1>🏹 Sagatavošanās mednieku eksāmenam</h1>
-            <p>Visi jautājumi ar 2026. gada labojumiem un bilžu identifikāciju</p>
+            <p>Visi jautājumi ar 2026. gada labojumiem un liela izmēra attēliem</p>
         </header>
 
         <div class="gallery-section">
@@ -110,7 +113,7 @@
                     <span class="slider"></span>
                 </label>
             </div>
-            <div id="counter" style="font-weight: bold;"></div>
+            <div id="counter" style="font-weight: bold; color: #2c5f2c;"></div>
         </div>
 
         <div id="questionsList"></div>
@@ -122,7 +125,6 @@
 <script>
 // --- DATUBĀZE ---
 const allQuestions = [
-    // --- DZĪVNIECI (Pēda, Mēsli, Reālā kāja) ---
     { id: 701, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: ALNIS", options: ["Alnis", "Staltbriedis", "Meža cūka"], answer: 0, imageTrack: "img/alnis_p.jpg", imageScat: "img/alnis_m.jpg", imageReal: "img/alnis_reals.jpg" },
     { id: 702, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: MEŽA CŪKA", options: ["Briedis", "Meža cūka", "Lācis"], answer: 1, imageTrack: "img/cuka_p.jpg", imageScat: "img/cuka_m.jpg", imageReal: "img/cuka_reals.jpg" },
     { id: 703, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: STALTBIERDIS", options: ["Alnis", "Staltbriedis", "Stirna"], answer: 1, imageTrack: "img/briedis_p.jpg", imageScat: "img/briedis_m.jpg", imageReal: "img/briedis_reals.jpg" },
@@ -140,8 +142,6 @@ const allQuestions = [
     { id: 715, question: "Identificē dzīvnieku: ONDATRA", options: ["Ūdensžurka", "Bebrs", "Ondatra"], answer: 2, imageTrack: "img/ondatra_p.jpg", imageScat: "img/ondatra_m.jpg", imageReal: "img/ondatra_reals.jpg" },
     { id: 716, question: "Identificē dzīvnieku: PELĒKAIS ZAĶIS", options: ["Baltais zaķis", "Pelēkais zaķis", "Trusis"], answer: 1, imageTrack: "img/p_zakis_p.jpg", imageScat: "img/p_zakis_m.jpg", imageReal: "img/p_zakis_reals.jpg" },
     { id: 717, question: "Identificē dzīvnieku: BALTAIS ZAĶIS", options: ["Pelēkais zaķis", "Baltais zaķis", "Meža zaķis"], answer: 1, imageTrack: "img/b_zakis_p.jpg", imageScat: "img/b_zakis_m.jpg", imageReal: "img/b_zakis_reals.jpg" },
-
-    // --- PUTNI ---
     { id: 718, question: "Kas redzams attēlā?", options: ["Mednis", "Rubenis", "Raķelis"], answer: 0, imageTrack: "img/mednis.jpg" },
     { id: 719, question: "Kas redzams attēlā?", options: ["Rubenis", "Mednis", "Teterevs"], answer: 0, imageTrack: "img/rubenis.jpg" },
     { id: 720, question: "Kas redzams attēlā?", options: ["Rubeņa mātīte", "Medņa mātīte", "Mežirbe"], answer: 0, imageTrack: "img/rubenis_m.jpg" },
@@ -155,119 +155,5 @@ const allQuestions = [
     { id: 728, question: "Kas redzams attēlā?", options: ["Sāmsalas pīle", "Garkaklis", "Zoss"], answer: 0, imageTrack: "img/samsalas_pile.jpg" },
     { id: 729, question: "Kas redzams attēlā?", options: ["Kākaulis", "Tumšā pīle", "Pūkpīle"], answer: 0, imageTrack: "img/kakaulis.jpg" },
     { id: 730, question: "Kas redzams attēlā?", options: ["Taigas sējas zoss", "Meža zoss", "Kanādas zoss"], answer: 0, imageTrack: "img/sejas_zoss.jpg" },
-    { id: 731, question: "Kas redzams attēlā?", options: ["Baltpieres zoss", "Mazā zoss", "Meža zoss"], answer: 0, imageTrack: "img/baltpieres_zoss.jpg" },
-    { id: 732, question: "Kas redzams attēlā?", options: ["Meža zoss", "Pelēkā zoss", "Ziemeļu zoss"], answer: 0, imageTrack: "img/meza_zoss.jpg" },
-    { id: 733, question: "Kas redzams attēlā?", options: ["Kanādas zoss", "Baltvaigu zoss", "Zoss"], answer: 0, imageTrack: "img/kanadas_zoss.jpg" },
-    { id: 734, question: "Kas redzams attēlā?", options: ["Baltvaigu zoss", "Kanādas zoss", "Mazā zoss"], answer: 0, imageTrack: "img/baltvaigu_zoss.jpg" },
-    { id: 735, question: "Kas redzams attēlā?", options: ["Mazā zoss", "Baltpieres zoss", "Sējas zoss"], answer: 0, imageTrack: "img/maza_zoss.jpg" },
-    { id: 736, question: "Kas redzams attēlā?", options: ["Pelēkā pīle", "Krīklis", "Prīkšķe"], answer: 0, imageTrack: "img/peleka_pile.jpg" },
-    { id: 737, question: "Kas redzams attēlā?", options: ["Prīkšķe", "Krīklis", "Platknābis"], answer: 0, imageTrack: "img/prikske.jpg" },
-    { id: 738, question: "Kas redzams attēlā?", options: ["Krīklis", "Prīkšķe", "Baltvēderis"], answer: 0, imageTrack: "img/kriklis.jpg" },
-    { id: 739, question: "Kas redzams attēlā?", options: ["Laucis", "Krīklis", "Ūdensvistiņa"], answer: 0, imageTrack: "img/laucis.jpg" },
-    { id: 740, question: "Kas redzams attēlā?", options: ["Cekulpīle", "Ķerra", "Gaigala"], answer: 0, imageTrack: "img/cekulpile.jpg" },
-    { id: 741, question: "Kas redzams attēlā?", options: ["Ķerra", "Cekulpīle", "Baltvēderis"], answer: 0, imageTrack: "img/kerra.jpg" },
-    { id: 742, question: "Kas redzams attēlā?", options: ["Baltvēderis", "Pelēkā pīle", "Krīklis"], answer: 0, imageTrack: "img/baltvederis.jpg" },
-    { id: 743, question: "Kas redzams attēlā?", options: ["Lauku balodis", "Meža balodis", "Mājas balodis"], answer: 0, imageTrack: "img/lauku_balodis.jpg" },
-    { id: 744, question: "Kas redzams attēlā?", options: ["Mājas balodis", "Lauku balodis", "Meža balodis"], answer: 0, imageTrack: "img/majas_balodis.jpg" },
-    { id: 745, question: "Kas redzams attēlā?", options: ["Meža balodis", "Lauku balodis", "Mājas balodis"], answer: 0, imageTrack: "img/meza_balodis.jpg" },
-    { id: 746, question: "Kas redzams attēlā?", options: ["Parastā pūkpīle", "Tumšā pīle", "Kākaulis"], answer: 0, imageTrack: "img/pukpile.jpg" },
-    { id: 747, question: "Kas redzams attēlā?", options: ["Krāšņā pūkpīle", "Pūkpīle", "Gaigala"], answer: 0, imageTrack: "img/krasna_pukpile.jpg" },
-    { id: 748, question: "Kas redzams attēlā?", options: ["Baltacis", "Cekulpīle", "Ķerra"], answer: 0, imageTrack: "img/baltacis.jpg" },
-    { id: 749, question: "Kas redzams attēlā?", options: ["Tumšā pīle", "Kākaulis", "Pūkpīle"], answer: 0, imageTrack: "img/tumsa_pile.jpg" },
-    { id: 750, question: "Kas redzams attēlā?", options: ["Platknābis", "Garkaklis", "Krīklis"], answer: 0, imageTrack: "img/platknabis.jpg" }
-];
-
-// --- PAROLES PĀRBAUDE ---
-async function checkPassword() {
-    const input = document.getElementById('pinCode').value.trim();
-    const errorEl = document.getElementById('login-error');
-    const correctHash = "8b74cd1290fe14c722dbbcb3d777f8704e142406842d125865ab4a2b08c93c40"; // L0de_svins_:)
-    
-    const encoder = new TextEncoder();
-    const data = encoder.encode(input);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    
-    if (hashHex === correctHash) {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('main-content').style.display = 'block';
-        renderGallery();
-        renderQuestions();
-    } else {
-        errorEl.innerText = "Nepareizs kods.";
-    }
-}
-
-// --- GALERIJA (ŠPIKERIS) ---
-function renderGallery() {
-    const container = document.getElementById('galleryContainer');
-    container.innerHTML = "";
-    
-    allQuestions.forEach(q => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        const name = q.options[q.answer];
-        
-        item.innerHTML = `
-            <img src="${q.imageTrack}" alt="${name}">
-            <div class="gallery-label">${name}</div>
-        `;
-        container.appendChild(item);
-    });
-}
-
-// --- TESTA RENDERĒŠANA ---
-function renderQuestions(filter = "") {
-    const list = document.getElementById('questionsList');
-    list.innerHTML = "";
-    let count = 0;
-
-    allQuestions.forEach(q => {
-        const name = q.options[q.answer].toLowerCase();
-        if (name.includes(filter.toLowerCase()) || q.question.toLowerCase().includes(filter.toLowerCase())) {
-            count++;
-            const div = document.createElement('div');
-            div.className = 'question-block';
-            
-          // Atrodi šo bloku funkcijā renderQuestions:
-let imgHtml = `<div class="img-holder">`;
-imgHtml += `<img src="${q.imageTrack}" title="Pēda/Foto" style="height: 300px;">`; // Pievienots stils šeit
-if(q.imageScat) imgHtml += `<img src="${q.imageScat}" title="Mēsli" style="height: 300px;">`;
-if(q.imageReal) imgHtml += `<img src="${q.imageReal}" title="Reālā kāja" style="height: 300px;">`;
-imgHtml += `</div>`;
-
-            const options = q.options.map((opt, i) => `
-                <div class="opt ${i === q.answer ? 'correct' : ''}" onclick="handleOptClick(this, ${i === q.answer})">
-                    ${opt}
-                </div>
-            `).join('');
-
-            div.innerHTML = `<span class="q-title">${q.id}. ${q.question}</span>${imgHtml}<div class="options">${options}</div>`;
-            list.appendChild(div);
-        }
-    });
-    document.getElementById('counter').innerText = `Atrasti: ${count}`;
-}
-
-function handleOptClick(el, isCorrect) {
-    if (!document.getElementById('modeToggle').checked) {
-        el.classList.add(isCorrect ? 'revealed-correct' : 'revealed-wrong');
-        el.innerText = (isCorrect ? "✅ " : "❌ ") + el.innerText;
-    }
-}
-
-document.getElementById('modeToggle').addEventListener('change', (e) => {
-    document.body.className = e.target.checked ? "show-answers" : "hide-answers";
-    renderQuestions(document.getElementById('searchInput').value);
-});
-
-document.getElementById('searchInput').addEventListener('input', (e) => renderQuestions(e.target.value));
-
-window.onscroll = () => {
-    document.getElementById("scrollTop").style.display = (window.scrollY > 500) ? "block" : "none";
-};
-</script>
-
-</body>
-</html>
+    { id: 731
+     
