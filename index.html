@@ -80,12 +80,12 @@
 
 <div id="login-screen">
     <div class="login-box">
-        <h1>🏹 Medību Eksāmens</h1>
-        <p>Ievadiet piekļuves kodu, lai sāktu</p>
+        <h1>🌲 Mednieku eksāmena apmācība</h1>
+        <p style="margin-bottom: 20px; font-size: 16px; opacity: 0.9;">Ievadiet piekļuves kodu, lai uzsāktu mācības</p>
         <input type="password" id="pinCode" placeholder="****" onkeypress="if(event.key==='Enter') checkPassword()">
         <br>
-        <button onclick="checkPassword()">Ienākt</button>
-        <p id="login-error" style="color: #ff8a8a; margin-top: 10px; font-size: 14px;"></p>
+        <button onclick="checkPassword()">Ienākt sistēmā</button>
+        <p id="login-error" style="color: #ff8a8a; margin-top: 15px; font-size: 14px; font-weight: bold;"></p>
     </div>
 </div>
 
@@ -121,10 +121,6 @@
 
 <script>
 // --- DATUBĀZE ---
-// Vari pievienot jautājumus gan ar bildēm, gan bez. 
-// Ja ir bildes, lieto: imageTrack, imageScat, imageReal
-// --- DATUBĀZE ---
-// Apvienoti gan zīdītāji (pēdas, mēsli, dabā), gan putni (tēviņš, mātīte).
 const allQuestions = [
     // --- 🐗 ZĪDĪTĀJI ---
     { id: 701, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: ALNIS", options: ["Alnis", "Staltbriedis", "Meža cūka"], answer: 0, imageTrack: "img/alnis_p.jpg", imageScat: "img/alnis_m.jpg", imageReal: "img/alnis_reals.jpg" },
@@ -176,9 +172,7 @@ const allQuestions = [
     { id: 746, question: "Kas redzams attēlā?", options: ["Pūkpīle", "Krāšņā pūkpīle", "Platknabis"], answer: 1, imageMale: "img/krasna_pukpile.jpg", imageFemale: "img/krasna_pukpile_m.jpg" },
     { id: 747, question: "Kas redzams attēlā?", options: ["Cekulpīle", "Kerra", "Baltacis"], answer: 2, imageMale: "img/baltacis.jpg", imageFemale: "img/baltacis_m.jpg" },
     { id: 748, question: "Kas redzams attēlā?", options: ["Tumšā pīle", "Platknabis", "Garkaklis"], answer: 0, imageMale: "img/tumsa_pile.jpg", imageFemale: "img/tumsa_pile_m.jpg" },
-    { id: 749, question: "Kas redzams attēlā?", options: ["Tumšā pīle", "Platknabis", "Baltvēderis"], answer: 1, imageMale: "img/platknabis.jpg", imageFemale: "img/platknabis_m.jpg" }
-]; // <-- Te pēdējais komats ir noņemts, tagad viss ir tīrs!    // --- JAUTĀJUMI BEZ BILDĒM ---
-    {id:1,question:"Limitētie medījamie dzīvnieki ir",options:["dzīvnieki, kuru medīšanai netiek noteikts pieļaujamais nomedīšanas apjoms","dzīvnieki, kuru medīšanai tiek noteikts pieļaujamais nomedīšanas apjoms","visi medījamie dzīvnieki"],answer:1,explanation:""},
+    { id: 749, question: "Kas redzams attēlā?", options: ["Tumšā pīle", "Platknabis", "Baltvēderis"], answer: 1, imageMale: "img/platknabis.jpg", imageFemale: "img/platknabis_m.jpg" },{id:1,question:"Limitētie medījamie dzīvnieki ir",options:["dzīvnieki, kuru medīšanai netiek noteikts pieļaujamais nomedīšanas apjoms","dzīvnieki, kuru medīšanai tiek noteikts pieļaujamais nomedīšanas apjoms","visi medījamie dzīvnieki"],answer:1,explanation:""},
 {id:2,question:"Limitētie medījamie dzīvnieki ir",options:["aizsargājamie dzīvnieki, kurus var medīt ar īpašu atļauju","dzīvnieki, kuru medīšanai tiek noteikts pieļaujamais nomedīšanas apjoms","visi medījamie dzīvnieki"],answer:1,explanation:""},
 {id:3,question:"Medību atļauja ir",options:["dokuments, kas ļauj nomedīt konkrētu skaitu limitēto medījamo attiecīgo sugu dzīvnieku","dokuments, kas ļauj norādītajā vietā nomedīt konkrētu skaitu limitēto medījamo attiecīgo sugu dzīvnieku","dokuments, kas ļauj norādītajā vietā nomedīt konkrētu skaitu nelimitēto medījamo attiecīgo sugu dzīvnieku"],answer:1,explanation:""},
 {id:4,question:"Medību iecirknis ir",options:["medību platība, kuru apsaimnieko viens medību tiesību lietotājs","medību tiesību lietotāja līgumplatības","vienlaidu medību platība, kuru apsaimnieko viens medību tiesību lietotājs"],answer:2,explanation:""},
@@ -1211,30 +1205,11 @@ const allQuestions = [
 {id:1134,question:"Cik liela daļa no meža cūkas kuiļa apakšējo ilkņu garuma parasti redzama ārpus žokļa kaula?",options:["aptuveni 1/3 daļa","puse","vairāk kā puse"],answer:0,explanation:""},
 {id:1135,question:"Kurai caunai pakakles laukums visbiežāk ir baltā krāsā un ir izstiepts uz priekškājām?",options:["akmens caunai","meža caunai","ūdelei"],answer:0,explanation:""},
 {id:1136,question:"Kurš no šiem dzīvniekiem ir augēdājs?",options:["alnis","lapsa","jenotsuns"],answer:0,explanation:""},
-{id:1137,question:"Apsveicam! Tu esi izgājis visus jautājumus. Vai esi gatavs eksāmenam?",options:["jā!","nē","vēlreiz jāpārlasa"],answer:0,explanation:""},
-
-    // --- JAUTĀJUMI AR BILDĒM ---
-    { id: 701, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: ALNIS", options: ["Alnis", "Staltbriedis", "Meža cūka"], answer: 0, imageTrack: "img/alnis_p.jpg", imageScat: "img/alnis_m.jpg", imageReal: "img/alnis_reals.jpg" },
-    { id: 702, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: ĀPSIS", options: ["Āpsis", "Bebrs", "Lācis"], answer: 0, imageTrack: "img/apsis_p.jpg", imageScat: "img/apsis_m.jpg", imageReal: "img/apsis_reals.jpg" },
-    { id: 703, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: BEBRS", options: ["Ūdrs", "Ondatra", "Bebrs"], answer: 2, imageTrack: "img/bebrs_p.jpg", imageScat: "img/bebrs_m.jpg", imageReal: "img/bebrs_reals.jpg" },
-    { id: 704, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: STALTBRIEDIS", options: ["Alnis", "Staltbriedis", "Stirna"], answer: 1, imageTrack: "img/briedis_p.jpg", imageScat: "img/briedis_m.jpg", imageReal: "img/briedis_reals.jpg" },
-    { id: 705, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: MEŽA CŪKA", options: ["Meža cūka", "Staltbriedis", "Alnis"], answer: 0, imageTrack: "img/cuka_p.jpg", imageScat: "img/cuka_m.jpg", imageReal: "img/cuka_reals.jpg" },
-    { id: 706, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: JENOTSUNS", options: ["Lapsa", "Jenotsuns", "Vilks"], answer: 1, imageTrack: "img/jenotsuns_p.jpg", imageScat: "img/jenotsuns_m.jpg", imageReal: "img/jenotsuns_reals.jpg" },
-    { id: 707, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: LĀCIS", options: ["Lācis", "Āpsis", "Vilks"], answer: 0, imageTrack: "img/lacis_p.jpg", imageScat: "img/lacis_m.jpg", imageReal: "img/lacis_reals.jpg" },
-    { id: 708, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: LAPSA", options: ["Lūsis", "Jenotsuns", "Lapsa"], answer: 2, imageTrack: "img/lapsa_p.jpg", imageScat: "img/lapsa_m.jpg", imageReal: "img/lapsa_reals.jpg" },
-    { id: 709, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: LŪSIS", options: ["Vilks", "Lūsis", "Lapsa"], answer: 1, imageTrack: "img/lusis_p.jpg", imageScat: "img/lusis_m.jpg", imageReal: "img/lusis_reals.jpg" },
-    { id: 710, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: ONDATRA", options: ["Ondatra", "Ūdrs", "Bebrs"], answer: 0, imageTrack: "img/ondatra_p.jpg", imageScat: "img/ondatra_m.jpg", imageReal: "img/ondatra_reals.jpg" },
-    { id: 711, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: STIRNA", options: ["Staltbriedis", "Stirna", "Alnis"], answer: 1, imageTrack: "img/stirna_p.jpg", imageScat: "img/stirna_m.jpg", imageReal: "img/stirna_reals.jpg" },
-    { id: 712, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: AMERIKAS ŪDELE", options: ["Amerikas ūdele", "Eiropas ūdele", "Ūdrs"], answer: 0, imageTrack: "img/udele_p.jpg", imageScat: "img/udele_m.jpg", imageReal: "img/udele_reals.jpg" },
-    { id: 713, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: ŪDRS", options: ["Bebrs", "Ondatra", "Ūdrs"], answer: 2, imageTrack: "img/udrs_p.jpg", imageScat: "img/udrs_m.jpg", imageReal: "img/udrs_reals.jpg" },
-    { id: 714, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: VILKS", options: ["Vilks", "Lapsa", "Jenotsuns"], answer: 0, imageTrack: "img/vilks_p.jpg", imageScat: "img/vilks_m.jpg", imageReal: "img/vilks_reals.jpg" },
-    { id: 715, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: PELĒKAIS ZAĶIS", options: ["Pelēkais zaķis", "Baltais zaķis", "Ondatra"], answer: 0, imageTrack: "img/pzakis_p.jpg", imageScat: "img/pzakis_m.jpg", imageReal: "img/pzakis_reals.jpg" },
-    { id: 716, question: "Identificē dzīvnieku pēc pēdām un izkārnījumiem: BALTAIS ZAĶIS", options: ["Pelēkais zaķis", "Baltais zaķis", "Meža cirpulis"], answer: 1, imageTrack: "img/zakis_p.jpg", imageScat: "img/zakis_m.jpg", imageReal: "img/zakis_reals.jpg" }
+{id:1137,question:"Apsveicam! Tu esi izgājis visus jautājumus. Vai esi gatavs eksāmenam?",options:["jā!","nē","vēlreiz jāpārlasa"],answer:0,explanation:""}
 ];
 
 // --- FUNKCIJAS ---
 
-// Bildes palielināšana
 function zoomImg(src) {
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
@@ -1242,7 +1217,6 @@ function zoomImg(src) {
     modalImg.src = src;
 }
 
-// Paroles pārbaude
 async function checkPassword() {
     const input = document.getElementById('pinCode').value.trim();
     const errorEl = document.getElementById('login-error');
@@ -1260,21 +1234,22 @@ async function checkPassword() {
         renderGallery();
         renderQuestions();
     } else {
-        errorEl.innerText = "Nepareizs kods.";
+        errorEl.innerText = "Nepareizs kods. Mēģiniet vēlreiz.";
+        document.getElementById('pinCode').value = "";
     }
 }
 
-// Galerijas renderēšana (tikai jautājumi ar bildēm)
 function renderGallery() {
     const container = document.getElementById('galleryContainer');
     container.innerHTML = "";
     allQuestions.forEach(q => {
-        if (q.imageTrack) {
+        const bilde = q.imageTrack || q.imageReal || q.imageMale;
+        if (bilde) {
             const item = document.createElement('div');
             item.className = 'gallery-item';
             const name = q.options[q.answer];
             item.innerHTML = `
-                <img src="${q.imageTrack}" onclick="zoomImg('${q.imageTrack}')" alt="${name}">
+                <img src="${bilde}" onclick="zoomImg('${bilde}')" alt="${name}">
                 <div class="gallery-label">${name}</div>
             `;
             container.appendChild(item);
@@ -1282,7 +1257,6 @@ function renderGallery() {
     });
 }
 
-// Jautājumu saraksta renderēšana
 function renderQuestions(filter = "") {
     const list = document.getElementById('questionsList');
     list.innerHTML = "";
@@ -1295,13 +1269,14 @@ function renderQuestions(filter = "") {
             const div = document.createElement('div');
             div.className = 'question-block';
             
-            // Bilžu bloks (parādās tikai ja ir definēts imageTrack)
             let imgHtml = "";
-            if (q.imageTrack) {
+            if (q.imageTrack || q.imageScat || q.imageReal || q.imageMale || q.imageFemale) {
                 imgHtml = `<div class="img-holder">`;
-                imgHtml += `<img src="${q.imageTrack}" onclick="zoomImg('${q.imageTrack}')" title="Pēda/Foto">`;
-                if(q.imageScat) imgHtml += `<img src="${q.imageScat}" onclick="zoomImg('${q.imageScat}')" title="Mēsli">`;
-                if(q.imageReal) imgHtml += `<img src="${q.imageReal}" onclick="zoomImg('${q.imageReal}')" title="Dzīvnieks">`;
+                if(q.imageTrack) imgHtml += `<img src="${q.imageTrack}" onclick="zoomImg('${q.imageTrack}')" title="Pēdas / Foto">`;
+                if(q.imageMale) imgHtml += `<img src="${q.imageMale}" onclick="zoomImg('${q.imageMale}')" title="Tēviņš ♂">`;
+                if(q.imageFemale) imgHtml += `<img src="${q.imageFemale}" onclick="zoomImg('${q.imageFemale}')" title="Mātīte ♀">`;
+                if(q.imageScat) imgHtml += `<img src="${q.imageScat}" onclick="zoomImg('${q.imageScat}')" title="Izkārnījumi">`;
+                if(q.imageReal) imgHtml += `<img src="${q.imageReal}" onclick="zoomImg('${q.imageReal}')" title="Dzīvnieks dabā">`;
                 imgHtml += `</div>`;
             }
 
@@ -1318,7 +1293,6 @@ function renderQuestions(filter = "") {
     document.getElementById('counter').innerText = `Atrasti: ${count}`;
 }
 
-// Atbildes klikšķis
 function handleOptClick(el, isCorrect) {
     if (!document.getElementById('modeToggle').checked) {
         el.classList.add(isCorrect ? 'revealed-correct' : 'revealed-wrong');
@@ -1328,7 +1302,6 @@ function handleOptClick(el, isCorrect) {
     }
 }
 
-// Event Listeners
 document.getElementById('modeToggle').addEventListener('change', (e) => {
     document.body.className = e.target.checked ? "show-answers" : "hide-answers";
     renderQuestions(document.getElementById('searchInput').value);
