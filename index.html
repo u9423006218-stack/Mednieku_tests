@@ -1271,14 +1271,33 @@ function renderQuestions(filter = "") {
             div.className = 'question-block';
             
             let imgHtml = "";
+                        // === NOŅEMT title tikai norādītajiem jautājumiem ===
+            const noTitleIDs = [719, 728, 730, 731, 732, 733, 734, 738, 742, 743, 744];
+
             if (q.imageTrack || q.imageScat || q.imageReal || q.imageMale || q.imageFemale) {
                 imgHtml = `<div class="img-holder">`;
-                if(q.imageTrack) imgHtml += `<img src="${q.imageTrack}" onclick="zoomImg('${q.imageTrack}')" title="Pēdas / Foto">`;
-                if(q.imageMale) imgHtml += `<img src="${q.imageMale}" onclick="zoomImg('${q.imageMale}')" title="Tēviņš ♂">`;
-                if(q.imageFemale) imgHtml += `<img src="${q.imageFemale}" onclick="zoomImg('${q.imageFemale}')" title="Mātīte ♀">`;
-                if(q.imageScat) imgHtml += `<img src="${q.imageScat}" onclick="zoomImg('${q.imageScat}')" title="Izkārnījumi">`;
-                if(q.imageReal) imgHtml += `<img src="${q.imageReal}" onclick="zoomImg('${q.imageReal}')" title="Dzīvnieks dabā">`;
+                
+                if(q.imageTrack) 
+                    imgHtml += `<img src="${q.imageTrack}" onclick="zoomImg('${q.imageTrack}')" title="Pēdas / Foto">`;
+                
+                if(q.imageMale) {
+                    const titleMale = noTitleIDs.includes(q.id) ? '' : ' title="Tēviņš ♂"';
+                    imgHtml += `<img src="${q.imageMale}" onclick="zoomImg('${q.imageMale}')"${titleMale}>`;
+                }
+                
+                if(q.imageFemale) {
+                    const titleFemale = noTitleIDs.includes(q.id) ? '' : ' title="Mātīte ♀"';
+                    imgHtml += `<img src="${q.imageFemale}" onclick="zoomImg('${q.imageFemale}')"${titleFemale}>`;
+                }
+                
+                if(q.imageScat) 
+                    imgHtml += `<img src="${q.imageScat}" onclick="zoomImg('${q.imageScat}')" title="Izkārnījumi">`;
+                
+                if(q.imageReal) 
+                    imgHtml += `<img src="${q.imageReal}" onclick="zoomImg('${q.imageReal}')" title="Dzīvnieks dabā">`;
+                
                 imgHtml += `</div>`;
+            
             }
 
             const options = q.options.map((opt, i) => `
