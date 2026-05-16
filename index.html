@@ -75,7 +75,11 @@
 <body class="show-answers">
 
 <div id="imageModal" onclick="if(event.target.id === 'imageModal') this.style.display='none'">
-    <div id="modalContent" style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center; max-width:95%; max-height:95%; overflow:auto; padding:20px; background:rgba(0,0,0,0.95); border-radius:12px;"></div>
+    <div id="modalContent" style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center; max-width:95%; max-height:95%; overflow:auto; padding:30px; background:rgba(0,0,0,0.95); border-radius:12px; position:relative;">
+        <!-- Close button -->
+        <button onclick="document.getElementById('imageModal').style.display='none'; event.stopImmediatePropagation();" 
+                style="position:absolute; top:15px; right:20px; background:#fff; color:#000; border:none; width:40px; height:40px; border-radius:50%; font-size:24px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.3);">✕</button>
+    </div>
 </div>
 
 <div id="login-screen">
@@ -1219,41 +1223,39 @@ function zoomImg(id) {
     const content = document.getElementById('modalContent');
     content.innerHTML = "";
 
+    // Izņēmuma ID, kuriem **nevajag rādīt mātītes bildi**
+    const noFemaleIDs = [719, 728, 730, 731, 732, 733, 734, 738, 742, 743, 744];
+
     const images = [];
 
     // Zīdītāji
-    if (question.imageTrack) {
-        images.push({ src: question.imageTrack, label: "Pēdas" });
-    }
-    if (question.imageScat) {
-        images.push({ src: question.imageScat, label: "Izkārnījumi" });
-    }
-    if (question.imageReal) {
-        images.push({ src: question.imageReal, label: "Dzīvnieks" });
-    }
+    if (question.imageTrack) images.push({ src: question.imageTrack, label: "Pēdas" });
+    if (question.imageScat)  images.push({ src: question.imageScat,  label: "Izkārnījumi" });
+    if (question.imageReal)  images.push({ src: question.imageReal,  label: "Dzīvnieks" });
 
     // Putni
     if (question.imageMale) {
         images.push({ src: question.imageMale, label: "Tēviņš ♂" });
     }
-    if (question.imageFemale) {
+    if (question.imageFemale && !noFemaleIDs.includes(question.id)) {
         images.push({ src: question.imageFemale, label: "Mātīte ♀" });
     }
 
-    // Izveidojam bildes modalā
+    // Izveido attēlus
     images.forEach(img => {
         const div = document.createElement('div');
         div.style.textAlign = "center";
         div.innerHTML = `
-            <img src="${img.src}" style="max-height:420px; max-width:100%; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.5); cursor:zoom-in;" onclick="event.stopImmediatePropagation();">
-            <div style="color:white; margin-top:8px; font-weight:bold;">${img.label}</div>
+            <img src="${img.src}" 
+                 style="max-height:460px; max-width:100%; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.6); cursor:zoom-in;" 
+                 onclick="event.stopImmediatePropagation();">
+            <div style="color:white; margin-top:10px; font-weight:bold; font-size:15px;">${img.label}</div>
         `;
         content.appendChild(div);
     });
 
     modal.style.display = "flex";
 }
-
 async function checkPassword() {
     const input = document.getElementById('pinCode').value.trim();
     const errorEl = document.getElementById('login-error');
