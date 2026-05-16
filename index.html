@@ -74,8 +74,8 @@
 </head>
 <body class="show-answers">
 
-<div id="imageModal" onclick="this.style.display='none'">
-    <img id="modalImg" src="">
+<div id="imageModal" onclick="if(event.target.id === 'imageModal') this.style.display='none'">
+    <div id="modalContent" style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center; max-width:95%; max-height:95%; overflow:auto; padding:20px; background:rgba(0,0,0,0.95); border-radius:12px;"></div>
 </div>
 
 <div id="login-screen">
@@ -92,12 +92,12 @@
 <div id="main-content">
     <div class="container">
         <header>
-            <h1>🏹 Sagatavošanās mednieku eksāmenam</h1>
-            <p>Visi jautājumi ar 2026. gada labojumiem un bilžu identifikāciju</p>
-        </header>
+    <h1>🏹 Mednieku mācību rīks</h1>
+    <p>Jautājumi ar bilžu identifikāciju</p>
+</header>
 
         <div class="gallery-section">
-            <h3 style="text-align: center; color: #2c5f2c;">📚 Atpazīšanas špikeris</h3>
+            <h3 style="text-align: center; color: #2c5f2c;">📚 Bildes</h3>
             <div id="galleryContainer" class="gallery-grid"></div>
         </div>
 
@@ -1211,11 +1211,47 @@ const allQuestions = [
 
 // --- FUNKCIJAS ---
 
-function zoomImg(src) {
+function zoomImg(id) {
+    const question = allQuestions.find(q => q.id === id);
+    if (!question) return;
+
     const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalImg');
+    const content = document.getElementById('modalContent');
+    content.innerHTML = "";
+
+    const images = [];
+
+    // Zīdītāji
+    if (question.imageTrack) {
+        images.push({ src: question.imageTrack, label: "Pēdas" });
+    }
+    if (question.imageScat) {
+        images.push({ src: question.imageScat, label: "Izkārnījumi" });
+    }
+    if (question.imageReal) {
+        images.push({ src: question.imageReal, label: "Dzīvnieks" });
+    }
+
+    // Putni
+    if (question.imageMale) {
+        images.push({ src: question.imageMale, label: "Tēviņš ♂" });
+    }
+    if (question.imageFemale) {
+        images.push({ src: question.imageFemale, label: "Mātīte ♀" });
+    }
+
+    // Izveidojam bildes modalā
+    images.forEach(img => {
+        const div = document.createElement('div');
+        div.style.textAlign = "center";
+        div.innerHTML = `
+            <img src="${img.src}" style="max-height:420px; max-width:100%; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.5); cursor:zoom-in;" onclick="event.stopImmediatePropagation();">
+            <div style="color:white; margin-top:8px; font-weight:bold;">${img.label}</div>
+        `;
+        content.appendChild(div);
+    });
+
     modal.style.display = "flex";
-    modalImg.src = src;
 }
 
 async function checkPassword() {
@@ -1243,21 +1279,23 @@ async function checkPassword() {
 function renderGallery() {
     const container = document.getElementById('galleryContainer');
     container.innerHTML = "";
+    
     allQuestions.forEach(q => {
-        const bilde = q.imageTrack || q.imageReal || q.imageMale;
-        if (bilde) {
-            const item = document.createElement('div');
-            item.className = 'gallery-item';
-            const name = q.options[q.answer];
-            item.innerHTML = `
-                <img src="${bilde}" onclick="zoomImg('${bilde}')" alt="${name}">
-                <div class="gallery-label">${name}</div>
-            `;
-            container.appendChild(item);
-        }
+        // Izvēlamies pirmo pieejamo bildi kā thumbnail
+        const thumbnail = q.imageTrack || q.imageReal || q.imageMale || q.imageFemale;
+        if (!thumbnail) return;
+
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        const name = q.options[q.answer];
+
+        item.innerHTML = `
+            <img src="${thumbnail}" onclick="zoomImg(${q.id})" alt="${name}">
+            <div class="gallery-label">${name}</div>
+        `;
+        container.appendChild(item);
     });
 }
-
 function renderQuestions(filter = "") {
     const list = document.getElementById('questionsList');
     list.innerHTML = "";
