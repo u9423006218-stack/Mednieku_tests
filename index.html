@@ -1223,17 +1223,14 @@ function zoomImg(id) {
     const content = document.getElementById('modalContent');
     content.innerHTML = "";
 
-    // Izņēmuma ID, kuriem **nevajag rādīt mātītes bildi**
     const noFemaleIDs = [719, 728, 730, 731, 732, 733, 734, 738, 742, 743, 744];
 
     const images = [];
 
-    // Zīdītāji
     if (question.imageTrack) images.push({ src: question.imageTrack, label: "Pēdas" });
     if (question.imageScat)  images.push({ src: question.imageScat,  label: "Izkārnījumi" });
     if (question.imageReal)  images.push({ src: question.imageReal,  label: "Dzīvnieks" });
 
-    // Putni
     if (question.imageMale) {
         images.push({ src: question.imageMale, label: "Tēviņš ♂" });
     }
@@ -1241,14 +1238,13 @@ function zoomImg(id) {
         images.push({ src: question.imageFemale, label: "Mātīte ♀" });
     }
 
-    // Izveido attēlus
     images.forEach(img => {
         const div = document.createElement('div');
         div.style.textAlign = "center";
         div.innerHTML = `
             <img src="${img.src}" 
-                 style="max-height:460px; max-width:100%; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.6); cursor:zoom-in;" 
-                 onclick="event.stopImmediatePropagation();">
+                 style="max-height:460px; max-width:100%; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.6); cursor:zoom-out;" 
+                 onclick="document.getElementById('imageModal').style.display='none';">
             <div style="color:white; margin-top:10px; font-weight:bold; font-size:15px;">${img.label}</div>
         `;
         content.appendChild(div);
@@ -1310,34 +1306,26 @@ function renderQuestions(filter = "") {
             const div = document.createElement('div');
             div.className = 'question-block';
             
-            let imgHtml = "";
-                        // === NOŅEMT title tikai norādītajiem jautājumiem ===
-            const noTitleIDs = [719, 728, 730, 731, 732, 733, 734, 738, 742, 743, 744];
-
+                        let imgHtml = "";
             if (q.imageTrack || q.imageScat || q.imageReal || q.imageMale || q.imageFemale) {
                 imgHtml = `<div class="img-holder">`;
                 
                 if(q.imageTrack) 
-                    imgHtml += `<img src="${q.imageTrack}" onclick="zoomImg('${q.imageTrack}')" title="Pēdas / Foto">`;
+                    imgHtml += `<img src="${q.imageTrack}" onclick="zoomImg(${q.id})" title="Pēdas">`;
                 
-                if(q.imageMale) {
-                    const titleMale = noTitleIDs.includes(q.id) ? '' : ' title="Tēviņš ♂"';
-                    imgHtml += `<img src="${q.imageMale}" onclick="zoomImg('${q.imageMale}')"${titleMale}>`;
-                }
+                if(q.imageMale) 
+                    imgHtml += `<img src="${q.imageMale}" onclick="zoomImg(${q.id})" title="Tēviņš ♂">`;
                 
-                if(q.imageFemale) {
-                    const titleFemale = noTitleIDs.includes(q.id) ? '' : ' title="Mātīte ♀"';
-                    imgHtml += `<img src="${q.imageFemale}" onclick="zoomImg('${q.imageFemale}')"${titleFemale}>`;
-                }
+                if(q.imageFemale) 
+                    imgHtml += `<img src="${q.imageFemale}" onclick="zoomImg(${q.id})" title="Mātīte ♀">`;
                 
                 if(q.imageScat) 
-                    imgHtml += `<img src="${q.imageScat}" onclick="zoomImg('${q.imageScat}')" title="Izkārnījumi">`;
+                    imgHtml += `<img src="${q.imageScat}" onclick="zoomImg(${q.id})" title="Izkārnījumi">`;
                 
                 if(q.imageReal) 
-                    imgHtml += `<img src="${q.imageReal}" onclick="zoomImg('${q.imageReal}')" title="Dzīvnieks dabā">`;
+                    imgHtml += `<img src="${q.imageReal}" onclick="zoomImg(${q.id})" title="Dzīvnieks">`;
                 
                 imgHtml += `</div>`;
-            
             }
 
             const options = q.options.map((opt, i) => `
